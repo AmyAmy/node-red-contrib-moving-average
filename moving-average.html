@@ -59,7 +59,7 @@
         <dt>topic <span class="property-type">string</span></dt>
         <dd>Moving averages are calculated per topic.</dd>
         
-        <dt>payload <span class="property-type">number</span>, <span class="property-type">boolean</span>, <span class="property-type">string</span></dt>
+        <dt>payload <span class="property-type">number | boolean | string</span></dt>
         <dd>
             <p>Whats happens depends on the type of the payload:</p>
             <h4><span class="property-type">number</span></h4>
@@ -71,24 +71,28 @@
             <p>When a string is received, it is interpreted as a command for
             the node:</p>
                 <ul>
-                    <li><pre>get</pre>: no number is added, only returns the
+                    <li><code>get</code>: no number is added, only returns the
                     current moving average.</li>
-                    <li><pre>count</pre>: no number is added, returns the
+                    <li><code>count</code>: no number is added, returns the
                     number of numbers currently stored.</li>
-                    <li><pre>pop</pre>: no number is added but the oldest
+                    <li><code>pop</code>: no number is added but the oldest
                     received number is removed.</li>
-                    <li><pre>clear</pre>: all stored numbers for the current
+                    <li><code>clear</code>: all stored numbers for the current
                     topic are removed.</li>
                 </ul>
         </dd>
     </dl>
     
     <h3>Outputs</h3>
-    <p>The output is a the message that was received, with payload set to
-    the current moving average.</p>
-    <p>If there is no average, (for example after the clear command is used) the payload is set to 0.</p>
-    <p>If you want to get the current moving average without adding a
-    number, set a message with "get" as the payload.</p>
-    <p>If the count command is used, the payload is not set to the current
-    moving average, but to the amount of numbers currently in memory.</p>
+    <p>The output is the message that was received, with the payload
+    changed:</p>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number</span></dt>
+        <dd>
+            <p>The payload is usually set to the current moving average.</p>
+            <p>If there is no average, (for example after the <code>clear</code> command is used) the payload is set to 0.</p>
+            <p>If you want to get the current moving average without adding a number, set a message with <code>get</code> as the payload.</p>
+            <p>If the <code>count</code> command is used, the payload is not set to the current moving average, but to the amount of numbers currently in memory.</p>
+        </dd>
+    </dl>
 </script>
