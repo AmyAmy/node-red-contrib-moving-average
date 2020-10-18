@@ -17,4 +17,12 @@ manipulate it:
 - "clear": Removes all stored numbers.
 - "count": Counts the number of currently stored numbers.
 
+
+## Links
+
 GitHub: https://github.com/AmyAmy/node-red-contrib-moving-average
+
+NPM: https://www.npmjs.com/package/node-red-contrib-moving-average
+
+Node-RED: https://flows.nodered.org/node/node-red-contrib-moving-average
+
