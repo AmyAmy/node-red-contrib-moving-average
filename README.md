@@ -16,3 +16,5 @@ manipulate it:
 - "pop": Removes the oldest stored number.
 - "clear": Removes all stored numbers.
 - "count": Counts the number of currently stored numbers.
+
+GitHub: https://github.com/AmyAmy/node-red-contrib-moving-average
