@@ -6,6 +6,7 @@
     "node-red"
   ],
   "author": "AmyAmy",
+  "repository": "github:AmyAmy/node-red-contrib-moving-average",
   "license": "WTFPL",
   "node-red": {
     "nodes": {
