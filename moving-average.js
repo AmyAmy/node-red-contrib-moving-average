@@ -1,5 +1,54 @@
 const NO_TOPIC = "_no_topic";
 
+const avg = (data, config) => {
+    const len = data.length;
+
+    if (!len) {
+        return 0;
+    }
+
+    switch (config.weight) {
+        case "linear": {
+            let num = data.reduce((acc, cur, idx) => acc + ((len - idx) * cur), 0);
+            let denom = len * (len + 1) / 2;
+            return num / denom;
+        }
+
+        case "cumulative":
+        default: { 
+            let num = data.reduce((acc, cur) => acc + cur);
+            return num / len;
+        }
+    }
+}
+
+const parsePayload = (payload) => {
+    switch (typeof (payload)) {
+        case "number":
+            return [payload, "add"];
+            
+        case "boolean":
+            return [payload ? 1 : 0, "add"];
+
+        case "string":
+            switch (payload) {
+                case "get":
+                case "count":
+                case "pop":
+                case "clear":
+                    return [0, payload];
+                
+                default:
+                    node.error('Invalid payload: expected number, boolean, "get", "count", "pop", "clear"');
+                    return [0, "get"];
+            }
+
+        default:
+            node.error("Invalid payload type: expected number, boolean, string");
+            return [0, "get"];
+    }
+}
+
 module.exports = function(RED) {
     function MovingAverageNode(config) {
         RED.nodes.createNode(this, config);
@@ -8,42 +57,10 @@ module.exports = function(RED) {
         const context = node.context();
         
         node.on('input', function(msg) {
-            let action = 'add';
-            let payload = 0;
-            let topic = msg.topit || NO_TOPIC;
-            
+            const topic = msg.topit || NO_TOPIC;
             let data = context.get(topic) || [];
-            
-            switch (typeof (msg.payload)) {
-                case "number":
-                    payload = msg.payload;
-                    break;
-                    
-                case "boolean":
-                    payload = msg.payload ? 1 : 0;
-                    break;
+            const [payload, action] = parsePayload(msg.payload);
 
-                case "string":
-                    switch (msg.payload) {
-                        case "get":
-                        case "count":
-                        case "pop":
-                        case "clear":
-                            action = msg.payload;
-                            break;
-                        
-                        default:
-                            node.error('Invalid payload: expected number, boolean, "get", "count", "pop", "clear"');
-                            break;
-                    }
-                    break;                    
-
-                default:                    
-                    node.error("Invalid payload type: expected number, boolean, string");
-                    action = "get";
-                    break;
-            }
-            
             switch (action) {
                 case 'add':
                     data = [payload, ...data].slice(0, config.amount || 10);
@@ -59,7 +76,7 @@ module.exports = function(RED) {
                     data = [];
                     context.set(topic, data);
                     break;
-            }                    
+            }
             
             switch (action) {
                 case 'count':
@@ -67,17 +84,13 @@ module.exports = function(RED) {
                     break;
                     
                 default:
-                    if (data.length) {
-                        result = data.reduce((acc, cur) => acc + cur) / data.length;
-                    }
-                    else {
-                        result = 0;
-                    }
+                    result = avg(data, config);
+                    break;
             }
         
             msg.payload = result;
             node.send(msg);
-        });        
+        });
     }
     
     RED.nodes.registerType("moving-average", MovingAverageNode);

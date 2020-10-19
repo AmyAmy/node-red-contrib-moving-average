@@ -13,34 +13,60 @@
                     return v > 0;
                 }
             },
+            weight: {
+                value: "cumulative",
+                required: true,
+                validate: function(v) {
+                    switch (v) {
+                        case "cumulative":
+                        case "linear":
+                        case "exponential":
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                }
+            }
         },
         inputs: 1,
         outputs: 1,
         icon: "font-awesome/fa-line-chart",
         label: function() {
-            return this.name || (this.amount || 10) + " message average";
+            return this.name || (this.amount || 10) + " message " + (this.weight || "") + " average";
         },
         paletteLabel: "moving average",
         labelStyle: function() {
             return this.name ? "node_label_italic" : "";
         },
-/*        oneditprepare: function() {
-            $("#node-input-amount").typedInput({
-                type: "num"
+        oneditprepare: function() {
+            $("#node-input-amount, #node-input-weight").on("change", function() {
+                var amount = $("#node-input-amount").val();
+                var weight = $("#node-input-weight").val();
+                $("#node-input-name").attr("placeholder", amount + " message " + weight + " average");
             });
-        }*/
+        }
     });
 </script>
 
 <script type="text/html" data-template-name="moving-average">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="X message average" />
+        <label for="node-input-name"><i class="fa fa-tag" role="presentation"></i> Name:</label>
+        <input type="text" id="node-input-name" placeholder="{amount} message {type} average" />
     </div>
+
     <div class="form-row">
-        <label for="node-input-amount">Amount</label>
+        <label for="node-input-amount">Amount:</label>
         <input type="number" id="node-input-amount" />
     </diV>
+
+    <div class="form-row">
+        <label for="node-input-weight">Type:</label>
+        <select id="node-input-weight" style="width: 70%;">
+            <option value="cumulative">Cumulative (not weigthed)</option>
+            <option value="linear">Linear (weigthed)</option>
+        </select>
+    </div>
 </script>
 
 <script type="text/html" data-help-name="moving-average">
