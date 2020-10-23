@@ -22,7 +22,7 @@ const avg = (data, config) => {
     }
 }
 
-const parsePayload = (payload) => {
+const parsePayload = (payload, error) => {
     switch (typeof (payload)) {
         case "number":
             return [payload, "add"];
@@ -39,12 +39,12 @@ const parsePayload = (payload) => {
                     return [0, payload];
                 
                 default:
-                    node.error('Invalid payload: expected number, boolean, "get", "count", "pop", "clear"');
+                    error(`Invalid payload: expected number, boolean, "get", "count", "pop", "clear"`);
                     return [0, "get"];
             }
 
         default:
-            node.error("Invalid payload type: expected number, boolean, string");
+            error(`Invalid payload type (${typeof (payload)}): expected number, boolean, string`);
             return [0, "get"];
     }
 }
@@ -57,9 +57,9 @@ module.exports = function(RED) {
         const context = node.context();
         
         node.on('input', function(msg) {
-            const topic = msg.topit || NO_TOPIC;
+            const topic = msg.topic || NO_TOPIC;
             let data = context.get(topic) || [];
-            const [payload, action] = parsePayload(msg.payload);
+            const [payload, action] = parsePayload(msg.payload, node.error);
 
             switch (action) {
                 case 'add':
