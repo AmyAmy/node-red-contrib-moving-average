@@ -17,6 +17,7 @@ manipulate it:
 - "clear": Removes all stored numbers.
 - "count": Counts the number of currently stored numbers.
 
+The original payload is returned as payload_in.
 
 ## Links
 

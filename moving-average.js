@@ -88,6 +88,7 @@ module.exports = function(RED) {
                     break;
             }
         
+            msg.payload_in = msg.payload;
             msg.payload = result;
             node.send(msg);
         });
