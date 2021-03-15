@@ -34,12 +34,14 @@ const parsePayload = (payload, error) => {
             switch (payload) {
                 case "get":
                 case "count":
+                case "min":
+                case "max":
                 case "pop":
                 case "clear":
                     return [0, payload];
                 
                 default:
-                    error(`Invalid payload: expected number, boolean, "get", "count", "pop", "clear"`);
+                    error(`Invalid payload: expected number, boolean, "get", "count", "min", "max", "pop", "clear"`);
                     return [0, "get"];
             }
 
@@ -81,6 +83,14 @@ module.exports = function(RED) {
             switch (action) {
                 case 'count':
                     result = data.length;
+                    break;
+                    
+                case 'min':
+                    result = Math.min(...data);
+                    break;
+                    
+                case 'max':
+                    result = Math.max(...data);
                     break;
                     
                 default:

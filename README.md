@@ -16,6 +16,8 @@ manipulate it:
 - "pop": Removes the oldest stored number.
 - "clear": Removes all stored numbers.
 - "count": Counts the number of currently stored numbers.
+- "min": Returns the minimum of the currently stored numbers.
+- "max": Returns the maximum of the currently stored numbers.
 
 The original payload is returned as payload_in.
 
