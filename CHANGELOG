@@ -9,3 +9,7 @@ Added option to use linear weigthed averages.
 1.2.0
 
 Added original payload as payload_in.
+
+1.3.0
+
+Added "min" and "max" commands.

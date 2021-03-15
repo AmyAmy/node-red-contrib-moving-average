@@ -97,14 +97,12 @@
             <p>When a string is received, it is interpreted as a command for
             the node:</p>
                 <ul>
-                    <li><code>get</code>: no number is added, only returns the
-                    current moving average.</li>
-                    <li><code>count</code>: no number is added, returns the
-                    number of numbers currently stored.</li>
-                    <li><code>pop</code>: no number is added but the oldest
-                    received number is removed.</li>
-                    <li><code>clear</code>: all stored numbers for the current
-                    topic are removed.</li>
+                    <li><code>get</code>: no number is added, only returns the current moving average.</li>
+                    <li><code>count</code>: no number is added, returns the number of numbers currently stored.</li>
+                    <li><code>min</code>: no number is added, returns the minimum of the numbers currently stored.</li>
+                    <li><code>max</code>: no number is added, returns the maximum of the numbers currently stored.</li>
+                    <li><code>pop</code>: no number is added but the oldest received number is removed.</li>
+                    <li><code>clear</code>: all stored numbers for the current topic are removed.</li>
                 </ul>
         </dd>
     </dl>
@@ -119,6 +117,7 @@
             <p>If there is no average, (for example after the <code>clear</code> command is used) the payload is set to 0.</p>
             <p>If you want to get the current moving average without adding a number, set a message with <code>get</code> as the payload.</p>
             <p>If the <code>count</code> command is used, the payload is not set to the current moving average, but to the amount of numbers currently in memory.</p>
+            <p>If the <code>min</code> or <code>max</code> command is used, the payload is not set to the current moving average, but to the minimum or the maximum of the numbers currently in memory.</p>
         </dd>
     </dl>
     <p>The original payload is returned as <code>payload_in</code>.</p>
