@@ -22,6 +22,17 @@ const avg = (data, config) => {
     }
 }
 
+const status = (value, data, config, node) => {
+    let fillValue = 'green';
+    if (!data.length) {
+        fillValue = 'red';
+    }
+    else if (data.length < config.amount) {
+        fillValue = 'yellow';
+    }
+    node.status({ fill: fillValue, shape: 'dot', text: result })
+}
+
 const parsePayload = (payload, error) => {
     switch (typeof (payload)) {
         case "number":
@@ -100,6 +111,7 @@ module.exports = function(RED) {
         
             msg.payload_in = msg.payload;
             msg.payload = result;
+            status(result, data, config, node);
             node.send(msg);
         });
     }
