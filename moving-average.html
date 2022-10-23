@@ -13,6 +13,21 @@
                     return v > 0;
                 }
             },
+            algorithm: {
+                value: "avg",
+                required: true,
+                validate: function(v) {
+                    switch (v) {
+                        case "avg":
+                        case "min":
+                        case "max":
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                }
+            },
             weight: {
                 value: "cumulative",
                 required: true,
@@ -33,17 +48,18 @@
         outputs: 1,
         icon: "font-awesome/fa-line-chart",
         label: function() {
-            return this.name || (this.amount || 10) + " message " + (this.weight || "") + " average";
+            return this.name || (this.amount || 10) + " messages " + this.algorithm;
         },
         paletteLabel: "moving average",
         labelStyle: function() {
             return this.name ? "node_label_italic" : "";
         },
         oneditprepare: function() {
-            $("#node-input-amount, #node-input-weight").on("change", function() {
+            $("#node-input-amount, #node-input-algorithm, #node-input-weight").on("change", function() {
                 var amount = $("#node-input-amount").val();
+                var algorithm = $("#node-input-algorithm").val();
                 var weight = $("#node-input-weight").val();
-                $("#node-input-name").attr("placeholder", amount + " message " + weight + " average");
+                $("#node-input-name").attr("placeholder", amount + " messages " + algorithm);
             });
         }
     });
@@ -58,10 +74,19 @@
     <div class="form-row">
         <label for="node-input-amount">Amount:</label>
         <input type="number" id="node-input-amount" />
-    </diV>
+    </div>
 
     <div class="form-row">
-        <label for="node-input-weight">Type:</label>
+        <label for="node-input-algorithm">Algorithm:</label>
+        <select id="node-input-algorithm" style="width: 70%;">
+            <option value="avg">Average</option>
+            <option value="min">Min</option>
+            <option value="max">Max</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-weight">Average type:</label>
         <select id="node-input-weight" style="width: 70%;">
             <option value="cumulative">Cumulative (not weigthed)</option>
             <option value="linear">Linear (weigthed)</option>
@@ -70,13 +95,21 @@
 </script>
 
 <script type="text/html" data-help-name="moving-average">
-    <p>Calculates a moving average over a configurable number of messages.</p>
+    <p>Calculates a moving average (or min/max) over a configurable number of messages.</p>
     
     <h3>Properties</h3>
     <dl class="message-properties">
         <dt>Amount <span class="property-type">number</span></dt>
         <dd>
             The number of messages over which the moving average is calculated.
+        </dd>
+        <dt>Algorithm <span class="property-type">string</span></dt>
+        <dd>
+            The default algorightm to use.
+        </dd>
+        <dt>Average type <span class="property-type">string</span></dt>
+        <dd>
+            Cumulative or linear average.
         </dd>
     </dl>
     

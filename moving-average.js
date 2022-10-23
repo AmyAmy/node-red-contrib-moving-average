@@ -72,7 +72,7 @@ module.exports = function(RED) {
         node.on('input', function(msg) {
             const topic = msg.topic || NO_TOPIC;
             let data = context.get(topic) || [];
-            const [payload, action] = parsePayload(msg.payload, node.error);
+            let [payload, action] = parsePayload(msg.payload, node.error);
 
             switch (action) {
                 case 'add':
@@ -89,6 +89,10 @@ module.exports = function(RED) {
                     data = [];
                     context.set(topic, data);
                     break;
+            }
+
+            if (action == 'add' || action == 'get') {
+                action = config.algorithm ?? 'avg';
             }
             
             switch (action) {
