@@ -22,6 +22,17 @@ const avg = (data, config) => {
     }
 }
 
+const status = (value, data, config, node) => {
+    let fillValue = 'green';
+    if (!data.length) {
+        fillValue = 'red';
+    }
+    else if (data.length < config.amount) {
+        fillValue = 'yellow';
+    }
+    node.status({ fill: fillValue, shape: 'dot', text: result })
+}
+
 const parsePayload = (payload, error) => {
     switch (typeof (payload)) {
         case "number":
@@ -61,7 +72,7 @@ module.exports = function(RED) {
         node.on('input', function(msg) {
             const topic = msg.topic || NO_TOPIC;
             let data = context.get(topic) || [];
-            const [payload, action] = parsePayload(msg.payload, node.error);
+            let [payload, action] = parsePayload(msg.payload, node.error);
 
             switch (action) {
                 case 'add':
@@ -78,6 +89,10 @@ module.exports = function(RED) {
                     data = [];
                     context.set(topic, data);
                     break;
+            }
+
+            if (action == 'add' || action == 'get') {
+                action = config.algorithm ?? 'avg';
             }
             
             switch (action) {
@@ -100,6 +115,7 @@ module.exports = function(RED) {
         
             msg.payload_in = msg.payload;
             msg.payload = result;
+            status(result, data, config, node);
             node.send(msg);
         });
     }
