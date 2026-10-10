@@ -9,10 +9,7 @@ const avg = (data, config) => {
 
     switch (config.weight) {
         case "linear": {
-            const num = data.reduce(
-                (acc, cur, idx) => acc + ((len - idx) * cur),
-                0
-            );
+            const num = data.reduce((acc, cur, idx) => acc + ((len - idx) * cur), 0);
             const denom = len * (len + 1) / 2;
             return num / denom;
         }
